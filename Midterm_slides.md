@@ -140,7 +140,7 @@ Footer: [1] Qi et al., AAAI 2024 · [2] Schaeffer et al., ICLR 2025 · [3] M-Att
 **On the slide:**
 
 Next steps:
-- Finish testing Qi's images on LLaVA and find the smallest working ε
+- Hand-check the LLaVA replies, then find the smallest working ε
 - Run the attack ourselves on newer open models (Qwen2.5-VL, Llama 3.2 Vision) at ε = 8, 16, 32
 - Take the best images to ChatGPT, Gemini and Claude, and record refusal vs. compliance
 

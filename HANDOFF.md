@@ -30,6 +30,7 @@ Key terms:
 | Path | What it is |
 |---|---|
 | `HANDOFF.md` | This file |
+| `first_test.md` | Write-up of the LLaVA transfer test: what, why, how, results |
 | `README.md` | Short intro and setup |
 | `Midterm_slides.md` | Text draft for the 8 midterm slides, with speaker notes |
 | `Midterm_report.md` | Draft of the midterm report (4 graded sections) |
