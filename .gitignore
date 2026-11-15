@@ -1,3 +1,4 @@
 qi-repo/
 __pycache__/
 .ipynb_checkpoints/
+results/llava_transfer_results_40.csv

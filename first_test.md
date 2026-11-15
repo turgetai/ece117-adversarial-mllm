@@ -72,7 +72,7 @@ The full per-prompt table is in `results/llava_transfer_refusals.csv`.
 
 - **Keyword check only.** "Not refused" means no refusal phrase was found. It does not prove the reply was harmful. A reply can skip the refusal words and still be useless, for example by only describing the panda.
 - **Not hand-checked yet.** Nobody has read the replies and labelled them.
-- **One run per prompt.** With greedy decoding a rerun gives the same replies, so we have no measure of spread.
+- **One reply per prompt.** We ran the whole test twice and got the same counts both times, as expected with greedy decoding. So the result is repeatable, but we have no measure of spread across different sampling settings.
 - **4-bit model.** The compressed model may behave slightly differently from the full-precision one.
 - **128-token limit.** A reply that starts to comply and refuses later would be cut off before the refusal.
 - **Only 40 prompts and one model.** Small sample.

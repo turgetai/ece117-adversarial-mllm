@@ -105,7 +105,7 @@ Ran all 40 of Qi's harmful test prompts with each of the 5 images on LLaVA-1.5-7
 - **The prompt decides, not the image:** 34 of 40 prompts got the same outcome with all five images.
 - **LLaVA-1.5 is weakly protected:** it already answers 57.5% with a clean image, so it is a poor model to show a jailbreak on.
 - "Not refused" means no refusal phrase was found. It does not prove the reply was harmful. Someone should hand-check a sample.
-- Per-prompt table: `results/llava_transfer_refusals.csv` (1 = refused). It has no model text. The full replies were not saved to the repo.
+- Per-prompt table: `results/llava_transfer_refusals.csv` (1 = refused). It has no model text. The full replies are in `results/llava_transfer_results_40.csv` on Etai's computer only. That file is git-ignored because the repo is public and the replies can be offensive. A rerun on 2026-11-15 gave the same counts.
 
 ---
 
