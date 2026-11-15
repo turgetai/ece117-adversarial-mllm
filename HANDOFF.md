@@ -67,16 +67,26 @@ Key terms:
 ### GPU constraint
 
 - Qi et al.'s code targets 13B-parameter models and expects one **A100 GPU with 80 GB** of memory. We don't have that.
-- Our workaround: **LLaVA-1.5-7B loaded in 4-bit** on the **free Colab T4 GPU** (about 15 GB).
+- Our workaround: **7B models on Colab**. Testing runs on the free T4 GPU with the model loaded in 4-bit. Building attack images uses a paid L4 GPU. See the GPU plan below.
 
 ---
 
-### Free Colab Pro for students (check this first)
+### GPU plan and cost (about $10 total)
 
-- Google offers a **free 1-year Colab Pro subscription** to students at US colleges. It was announced in July 2025 as a limited number of subscriptions, so it may have closed. Nobody on the team has confirmed it works with a UCLA account yet.
-- **How to check:** go to [colab.research.google.com/signup](https://colab.research.google.com/signup), sign in with your UCLA Google account, and look for the **"No cost to students and educators"** button. It starts a student verification step.
-- **Why it matters:** Colab Pro gives about 100 compute units a month and better access to bigger GPUs (L4 with about 24 GB, sometimes A100 with 40 GB) when they are available. That is not guaranteed, but it would make Stage 2 (running the attack ourselves, which needs gradients) much more realistic than on the free T4.
-- If it does not work, everything in this handoff still runs on the free T4.
+The free student Colab Pro offer did **not** show up on Etai's UCLA account (checked 2026-11-15), so we plan to pay a small amount instead.
+
+| Job | GPU | Memory | Cost | Why |
+|---|---|---|---|---|
+| Testing images on a model (Stage 1 LLaVA test, any "ask the model" run) | **T4** | 15 GB | Free | The 4-bit 7B model fits, and no gradients are needed |
+| Building our own attack images (Stage 2) | **L4** | 24 GB | about 1.7 compute units/hour, roughly $0.17/hour | Building an image needs gradients, which takes much more memory than the T4 has |
+| Only if the L4 runs out of memory | A100 | 40 GB | about 5.4 compute units/hour, roughly $0.54/hour | 3x the price of the L4, so use it as a last resort |
+
+- **What to buy:** one **Pay As You Go** pack, **$9.99 for 100 compute units**. It is a one-time purchase, so there is no subscription to cancel. Colab Pro costs the same per month for the same 100 units, but it renews.
+- **How far it goes:** 100 units is about 58 hours on the L4, or about 18 hours on the A100.
+- **How to split it:** units belong to one Google account and cannot be shared. One person buys the pack and runs the GPU jobs, and the team splits the $10. Everyone else can still open and edit the shared notebook.
+- **To pick the GPU in Colab:** Runtime → Change runtime type → choose T4, L4 or A100.
+- **Not tested yet:** the unit rates above are from a March 2026 price check and move a little. Whether the full attack fits in the L4's 24 GB is an estimate. If it doesn't, try the 4-bit model first, then the A100.
+- Stop the runtime when you finish (Runtime → Disconnect and delete runtime). Idle sessions still burn units.
 
 ## 4. What is NOT done
 

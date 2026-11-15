@@ -79,7 +79,7 @@ Goals 1 and 2 build the baseline. Goals 3 and 4 are the new part. Goal 1 is unde
 | 11 | Final report | All | ⏳ |
 
 **Speaker notes:**
-We're about a week behind our intro plan. The main reason is hardware (slide 8). We adjusted by moving to smaller models that run on a free GPU.
+We're about a week behind our intro plan. The main reason is hardware (slide 8). We adjusted by moving to smaller models on Colab: the free T4 GPU for testing, and about $10 of L4 GPU time for building our own images.
 
 ---
 
@@ -120,7 +120,7 @@ PSNR measures how much the pixels changed: higher is less visible, and roughly 3
 | Models | MiniGPT-4, InstructBLIP, LLaVA (13B, 2023) | 40+ open VLMs | GPT-4o, Gemini, Claude | LLaVA → newer open VLMs → closed models |
 | Access | White-box | White-box → transfer | Black-box transfer | White-box → transfer |
 | Goal | Jailbreak | Jailbreak | Misdescribe image | Jailbreak + smallest working ε |
-| Compute | 80 GB A100 | Large cluster | — | Free Colab T4 (4-bit) |
+| Compute | 80 GB A100 | Large cluster | — | Colab: free T4, paid L4 (~$10) |
 | Finding | One image jailbreaks many prompts | Jailbreaks rarely transfer | >90% transfer for targeted descriptions | In progress |
 
 - **What we add:**
@@ -146,7 +146,7 @@ Next steps:
 
 | Risk | Backup |
 |---|---|
-| Original code needs an 80 GB GPU | 7B models in 4-bit on Colab (already working); ask the TA about lab GPUs |
+| Original code needs an 80 GB GPU | 7B models on Colab: free T4 (15 GB) for testing, L4 (24 GB, about $10 total) for building images; A100 only if the L4 runs out of memory |
 | Newer open models resist the attack | Report how far we got (ASR per ε); try larger ε or more optimization steps |
 | Images don't transfer to closed models | Still a valid result (agrees with Schaeffer et al.); try an ensemble of open models as the source |
 | Closed-model terms of service | Small number of benign-category test prompts; check with Kaiyuan first |

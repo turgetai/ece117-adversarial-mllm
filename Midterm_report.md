@@ -63,6 +63,8 @@ Observations:
 
 **4.2 Compute constraint and pipeline.** The original code targets 13B-parameter models and expects a single 80 GB A100 GPU, which we don't have. We built an alternative pipeline that loads LLaVA-1.5-7B in 4-bit precision on a free Colab T4 GPU (15 GB). It feeds each of Qi et al.'s 40 manual harmful instructions together with each of the five images, then flags refusals with a refusal-phrase check (the standard first-pass metric in jailbreak papers). Outputs will be hand-checked on a sample. This run is in progress. Its results will show whether the MiniGPT-4 images transfer to LLaVA, and give the first ASR-per-ε data points for goal 2. The same pipeline will be reused to generate our own images on newer open models in stage 2.
 
+**4.3 Compute plan.** Testing an image on a model needs no gradients, so it runs on the free T4. Generating our own attack images needs gradients through the full model, which takes more memory than the T4 has. For that we plan to use a Colab L4 GPU (24 GB), paid through one Pay As You Go pack of 100 compute units ($9.99). At roughly 1.7 units per hour, that is about 58 hours of L4 time. The A100 (40 GB, roughly 5.4 units per hour) is our fallback if the L4 runs out of memory. We have not yet tested whether the attack fits on the L4.
+
 *[If the run finishes before submission, add: ASR with clean image = X%, with ε = 16 image = Y%, …, on N prompts. Use only measured numbers.]*
 
 ## References
