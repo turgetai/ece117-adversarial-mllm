@@ -39,7 +39,7 @@ Key terms:
 | `results/slide_results_row.png` | Figure for slide 6 |
 | `results/slide_clean_vs_adv.png` | Clean vs. ε = 16 vs. amplified noise |
 | `results/side_by_side.png` | All four attack images plus their noise |
-| `notebooks/llava_transfer_test.ipynb` | Colab notebook: tests Qi's images on LLaVA-1.5-7B. **Never run yet.** |
+| `notebooks/llava_transfer_test.ipynb` | Colab notebook: tests Qi's images on LLaVA-1.5-7B. Run on 2026-11-15, works. |
 | `qi-repo/` | Qi et al.'s code and images. **Not in this repo.** Clone it yourself (section 5). |
 
 ---
@@ -88,30 +88,44 @@ The free student Colab Pro offer did **not** show up on Etai's UCLA account (che
 - **Not tested yet:** the unit rates above are from a March 2026 price check and move a little. Whether the full attack fits in the L4's 24 GB is an estimate. If it doesn't, try the 4-bit model first, then the A100.
 - Stop the runtime when you finish (Runtime → Disconnect and delete runtime). Idle sessions still burn units.
 
+### LLaVA transfer test: done (2026-11-15)
+
+Ran all 40 of Qi's harmful test prompts with each of the 5 images on LLaVA-1.5-7B (4-bit, free Colab T4, about 20 minutes).
+
+| Image | Not refused (of 40) | Rate |
+|---|---|---|
+| Clean | 23 | 57.5% |
+| ε = 16 | 24 | 60.0% |
+| ε = 32 | 24 | 60.0% |
+| ε = 64 | 21 | 52.5% |
+| Unconstrained | 25 | 62.5% |
+
+- **No clear transfer:** Qi's images were built for MiniGPT-4 and make no real difference on LLaVA.
+- **The prompt decides, not the image:** 34 of 40 prompts got the same outcome with all five images.
+- **LLaVA-1.5 is weakly protected:** it already answers 57.5% with a clean image, so it is a poor model to show a jailbreak on.
+- "Not refused" means no refusal phrase was found. It does not prove the reply was harmful. Someone should hand-check a sample.
+- Per-prompt table: `results/llava_transfer_refusals.csv` (1 = refused). It has no model text. The full replies were not saved to the repo.
+
+---
+
 ## 4. What is NOT done
 
 - **Slide 6 picture:** the slide now has the results table. The panda figure is optional.
-- **The Colab notebook has never been run.** It is untested and may need small fixes.
-- **No attack-success numbers yet.** Everything about LLaVA is "in progress" in the slides and report.
-- **Report section 4.2** has a placeholder for the LLaVA results. It is still empty.
+- **The LLaVA replies are not hand-checked.** The numbers below come from a keyword check only.
 - **Stages 2 and 3** (our own images, closed models) have not been started.
 
 ---
 
 ## 5. What to do next, and how
 
-### A. Run the LLaVA test (do this first)
+### A. Hand-check the LLaVA results (do this first)
 
-1. Go to [colab.research.google.com](https://colab.research.google.com) and upload `notebooks/llava_transfer_test.ipynb` (File → Upload notebook).
-2. Runtime → Change runtime type → **T4 GPU**.
-3. Runtime → **Run all**. The first cells install packages, clone Qi's repo, and download the model.
-4. It uses 10 prompts by default (about 10–15 minutes). For the full set, change `N_PROMPTS = 10` to `40` (about 45 minutes).
-5. The summary cell prints ASR per image (clean, eps16, eps32, eps64, unconstrained). The last cell downloads `llava_transfer_results.csv`.
-6. **Hand-check the results.** The keyword check is rough. A reply can avoid refusal words and still not be harmful (for example, it just describes the panda). Read a sample of the CSV and correct the labels before quoting numbers.
-7. Put the numbers in:
-   - `Midterm_report.md`, section 4.2 (replace the placeholder line).
-   - Slide 6 of the Google Slides deck (one line, e.g. "clean X% vs. ε = 16 Y%").
-   - Save the CSV into `results/`.
+The test has been run (results above). What is left is checking it by hand.
+
+1. Open the notebook in Colab straight from the repo: `https://colab.research.google.com/github/turgetai/ece117-adversarial-mllm/blob/main/notebooks/llava_transfer_test.ipynb`
+2. Runtime → Change runtime type → **T4 GPU**, then Runtime → **Run all**. Model download takes about 6 minutes. The first part runs 10 prompts. The last cell runs all 40 (about 20 minutes).
+3. Open `llava_transfer_results_40.csv` from the folder icon on the left. Read a sample of the replies marked "not refused" and decide whether each one really complied. A reply can avoid refusal words and still not be harmful.
+4. If the hand-checked numbers differ from the keyword numbers, update `Midterm_report.md` section 4.4 and slide 6.
 
 Warning: model outputs may be offensive. **Report counts and percentages only.** Don't paste raw outputs into slides or the report.
 

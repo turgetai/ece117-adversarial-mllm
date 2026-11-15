@@ -72,7 +72,8 @@ Goals 1 and 2 build the baseline. Goals 3 and 4 are the new part. Goal 1 is unde
 | 5–6 | Literature review, get Qi et al. code + attack images | Etai, Nolan | ✅ Done |
 | 7 | Measurement script (PSNR/SSIM) on Qi's images | Michael, Etai | ✅ Done |
 | 7–8 | GPU setup: LLaVA-1.5-7B on Colab | Jason | ✅ Notebook built |
-| 8 | Test Qi's images on LLaVA; find the smallest ε that works | Jason, Nolan | 🔄 In progress |
+| 8 | Test Qi's images on LLaVA (40 prompts) | Jason, Nolan | ✅ Done |
+| 8–9 | Find the smallest ε that works (needs our own images) | Nolan, Jason | ⏳ Next |
 | 9 | Generate our own jailbreak images on newer open models | Nolan, Jason | ⏳ Next |
 | 9–10 | Test our images on ChatGPT, Gemini, Claude; collect results | Michael, Etai | ⏳ Next |
 | 10 (11/30) | Final presentation | All | ⏳ |
@@ -106,8 +107,7 @@ We're about a week behind our intro plan. The main reason is hardware (slide 8).
 **Speaker notes:**
 PSNR measures how much the pixels changed: higher is less visible, and roughly 30 dB or more is hard to notice. SSIM measures whether the image structure is preserved: 1.0 means identical. Max pixel change confirms the attack stayed within its budget. Our measured 18 vs. 16 is ±2 from resizing the clean image.
 
-> [!note] If the LLaVA notebook finishes tonight
-> Add one line: "Qi's images on LLaVA-1.5-7B: X% of harmful prompts answered with clean image vs. Y% with ε = 16, Z% with ε = 64 (keyword check, N prompts)." That's your first trade-off data point. Only use numbers that came out of the run.
+- **LLaVA transfer test (40 prompts, keyword check):** not refused 57.5% with the clean image vs. 52.5–62.5% with the attack images. No clear transfer, and the clean baseline is already high.
 
 ---
 
@@ -121,7 +121,7 @@ PSNR measures how much the pixels changed: higher is less visible, and roughly 3
 | Access | White-box | White-box → transfer | Black-box transfer | White-box → transfer |
 | Goal | Jailbreak | Jailbreak | Misdescribe image | Jailbreak + smallest working ε |
 | Compute | 80 GB A100 | Large cluster | — | Colab: free T4, paid L4 (~$10) |
-| Finding | One image jailbreaks many prompts | Jailbreaks rarely transfer | >90% transfer for targeted descriptions | In progress |
+| Finding | One image jailbreaks many prompts | Jailbreaks rarely transfer | >90% transfer for targeted descriptions | No transfer to LLaVA so far |
 
 - **What we add:**
   - Jailbreak tests on today's open models

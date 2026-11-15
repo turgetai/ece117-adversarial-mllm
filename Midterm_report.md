@@ -38,8 +38,9 @@ Our project builds visual jailbreak images and tests how far they reach, from th
 |---|---|---|---|
 | 5–6 | Literature review; obtain Qi et al. code and attack images | Etai, Nolan | Done |
 | 7 | Perturbation measurement script (PSNR/SSIM/L∞) | Michael, Etai | Done |
-| 7–8 | GPU environment: 4-bit LLaVA-1.5-7B on Colab | Jason | Pipeline built |
-| 8 | Test Qi's images on LLaVA (5 images × 40 instructions); find the smallest working ε | Jason, Nolan | In progress |
+| 7–8 | GPU environment: 4-bit LLaVA-1.5-7B on Colab | Jason | Done |
+| 8 | Test Qi's images on LLaVA (5 images × 40 instructions) | Jason, Nolan | Done |
+| 8–9 | Find the smallest working ε (needs our own images) | Nolan, Jason | Planned |
 | 9 | Generate our own jailbreak images on newer open models at ε = 8/16/32 | Nolan, Jason | Planned |
 | 9–10 | Test our images on ChatGPT, Gemini, Claude; collect results | Michael, Etai | Planned |
 | 10 | Final presentation (11/30) | All | Planned |
@@ -61,11 +62,26 @@ Observations:
 - **The noise is spread over the whole image, not a local patch.** More than 92% of pixels change even at the smallest budget.
 - **The smallest released budget is not fully invisible.** At ε = 16/255, PSNR is 28.1 dB (below the roughly 30 dB often used as a rule of thumb for hard-to-notice distortion) and SSIM is 0.58, and a faint texture is visible on close inspection. This motivates goal 2: testing smaller budgets (ε = 8/255) to find the point where the attack stops working.
 
-**4.2 Compute constraint and pipeline.** The original code targets 13B-parameter models and expects a single 80 GB A100 GPU, which we don't have. We built an alternative pipeline that loads LLaVA-1.5-7B in 4-bit precision on a free Colab T4 GPU (15 GB). It feeds each of Qi et al.'s 40 manual harmful instructions together with each of the five images, then flags refusals with a refusal-phrase check (the standard first-pass metric in jailbreak papers). Outputs will be hand-checked on a sample. This run is in progress. Its results will show whether the MiniGPT-4 images transfer to LLaVA, and give the first ASR-per-ε data points for goal 2. The same pipeline will be reused to generate our own images on newer open models in stage 2.
+**4.2 Compute constraint and pipeline.** The original code targets 13B-parameter models and expects a single 80 GB A100 GPU, which we don't have. We built an alternative pipeline that loads LLaVA-1.5-7B in 4-bit precision on a free Colab T4 GPU (15 GB). It feeds each of Qi et al.'s 40 manual harmful instructions together with each of the five images, then flags refusals with a refusal-phrase check (the standard first-pass metric in jailbreak papers). Outputs will be hand-checked on a sample. The results are in section 4.4. The same pipeline will be reused to generate our own images on newer open models in stage 2.
 
 **4.3 Compute plan.** Testing an image on a model needs no gradients, so it runs on the free T4. Generating our own attack images needs gradients through the full model, which takes more memory than the T4 has. For that we plan to use a Colab L4 GPU (24 GB), paid through one Pay As You Go pack of 100 compute units ($9.99). At roughly 1.7 units per hour, that is about 58 hours of L4 time. The A100 (40 GB, roughly 5.4 units per hour) is our fallback if the L4 runs out of memory. We have not yet tested whether the attack fits on the L4.
 
-*[If the run finishes before submission, add: ASR with clean image = X%, with ε = 16 image = Y%, …, on N prompts. Use only measured numbers.]*
+**4.4 Transfer test on LLaVA-1.5-7B.** We ran the pipeline on all 40 of Qi et al.'s manual harmful instructions, once with each of the five images (200 model replies, on a free Colab T4, 2026-11-15). The table shows how many instructions the model did not refuse, by the refusal-phrase check.
+
+| Image | Not refused (of 40) | Rate |
+|---|---|---|
+| Clean (no attack) | 23 | 57.5% |
+| ε = 16/255 | 24 | 60.0% |
+| ε = 32/255 | 24 | 60.0% |
+| ε = 64/255 | 21 | 52.5% |
+| Unconstrained | 25 | 62.5% |
+
+Observations:
+- **No clear transfer.** The attack images move the rate by at most 2 instructions out of 40 in either direction, and the ε = 64 image is slightly *lower* than the clean image. The images were built for MiniGPT-4, and on LLaVA they have no measurable effect. This agrees with Schaeffer et al. [6].
+- **The outcome depends on the instruction, not the image.** For 34 of the 40 instructions the model gave the same outcome with all five images: 20 answered every time and 14 refused every time.
+- **The clean baseline is already high.** LLaVA-1.5-7B did not refuse 57.5% of the instructions even with the unmodified image. Its safety alignment is weak to begin with, so it leaves little room to show a jailbreak. Newer, better-aligned open models are a more meaningful target for stage 2.
+
+Limitations: the refusal-phrase check is a first pass. A reply without a refusal phrase is not necessarily harmful, and we have not hand-labelled the replies yet. The model was loaded in 4-bit precision, with greedy decoding and a 128-token limit. Each prompt was run once. The per-instruction refusal table is in `results/llava_transfer_refusals.csv`.
 
 ## References
 
