@@ -1,0 +1,5 @@
+image,budget_eps,linf,l2_rms,pct_pixels_changed,psnr_db,ssim
+eps = 16/255,16,18,10.08,92.5,28.06,0.584
+eps = 32/255,32,34,20.58,96.3,21.86,0.31
+eps = 64/255,64,66,39.35,97.7,16.23,0.139
+unconstrained,none,252,110.69,98.9,7.25,0.006
