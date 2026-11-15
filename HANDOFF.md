@@ -71,12 +71,19 @@ Key terms:
 
 ---
 
+### Free Colab Pro for students (check this first)
+
+- Google offers a **free 1-year Colab Pro subscription** to students at US colleges. It was announced in July 2025 as a limited number of subscriptions, so it may have closed. Nobody on the team has confirmed it works with a UCLA account yet.
+- **How to check:** go to [colab.research.google.com/signup](https://colab.research.google.com/signup), sign in with your UCLA Google account, and look for the **"No cost to students and educators"** button. It starts a student verification step.
+- **Why it matters:** Colab Pro gives about 100 compute units a month and better access to bigger GPUs (L4 with about 24 GB, sometimes A100 with 40 GB) when they are available. That is not guaranteed, but it would make Stage 2 (running the attack ourselves, which needs gradients) much more realistic than on the free T4.
+- If it does not work, everything in this handoff still runs on the free T4.
+
 ## 4. What is NOT done
 
+- **Slide 6 picture:** the slide now has the results table. The panda figure is optional.
 - **The Colab notebook has never been run.** It is untested and may need small fixes.
 - **No attack-success numbers yet.** Everything about LLaVA is "in progress" in the slides and report.
 - **Report section 4.2** has a placeholder for the LLaVA results. It is still empty.
-- **Slide 6** in Google Slides is missing its picture (`results/slide_results_row.png`).
 - **Stages 2 and 3** (our own images, closed models) have not been started.
 
 ---
@@ -120,7 +127,7 @@ Run these from the project folder. The first script writes the CSV and two figur
 
 ### C. Add the picture to slide 6
 
-Drag `results/slide_results_row.png` onto slide 6 in Google Slides, below the bullets.
+Optional. Slide 6 already has the results table and is full. If you want the panda picture too, use `results/slide_results_row.png`, but you would need to shrink the table or move it to its own slide.
 
 ### D. Stage 1: find the smallest ε that works
 
